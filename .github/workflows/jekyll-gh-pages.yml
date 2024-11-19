@@ -83,7 +83,7 @@ jobs:
       # Step 7: Copy RPMs and metadata to the _site directory for GitHub Pages
       - name: Copy RPMs and metadata to _site directory
         run: |
-          cp -R ~/repo/* ./_site/
+          sudo cp -R ~/repo ./_site/
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
