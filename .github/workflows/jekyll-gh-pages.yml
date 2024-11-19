@@ -70,7 +70,7 @@ jobs:
           cp ~/rpms/*.src.rpm ~/repo/
           dpkg -l | grep createrepo
           dpkg -L createrepo-c
-          createrepo-c ~/repo
+          createrepo_c ~/repo
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
