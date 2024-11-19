@@ -30,7 +30,7 @@ jobs:
         uses: actions/checkout@v4
 
       # Step 2: Install necessary tools
-      - name: Install createrepo and gh CLI
+      - name: Install createrepo-c and gh CLI
         run: |
           sudo apt update
           sudo apt install -y createrepo gh
