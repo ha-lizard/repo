@@ -1,5 +1,4 @@
-# Sample workflow for building and deploying a Jekyll site to GitHub Pages
-name: Deploy Jekyll with GitHub Pages dependencies preinstalled
+name: Build, Deploy RPM Repository, and GitHub Pages
 
 on:
   # Runs on pushes targeting the default branch
@@ -26,8 +25,47 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      # Step 1: Checkout the repository
+      - name: Checkout Code
         uses: actions/checkout@v4
+
+      # Step 2: Install necessary tools
+      - name: Install createrepo and gh CLI
+        run: |
+          sudo apt update
+          sudo apt install -y createrepo gh
+
+      # Step 3: Create a temporary directory for storing RPMs
+      - name: Create directory for RPMs
+        run: mkdir -p ~/rpms
+
+      # Step 4: List and download RPMs from other repositories
+      - name: Download RPMs from ha-lizard/ha-lizard-rpm-demo
+        run: |
+          releases=$(gh release list --repo ha-lizard/ha-lizard-rpm-demo --json tagName -q ".[].tagName")
+          for release in $releases; do
+            echo "Downloading release $release"
+            gh release download --repo ha-lizard/ha-lizard-rpm-demo $release --pattern "*.rpm" --dir ~/rpms
+            gh release download --repo ha-lizard/ha-lizard-rpm-demo $release --pattern "*.src.rpm" --dir ~/rpms
+          done
+
+      - name: Download RPMs from ha-lizard/iscsi-ha
+        run: |
+          releases=$(gh release list --repo ha-lizard/iscsi-ha --json tagName -q ".[].tagName")
+          for release in $releases; do
+            echo "Downloading release $release"
+            gh release download --repo ha-lizard/iscsi-ha $release --pattern "*.rpm" --dir ~/rpms
+            gh release download --repo ha-lizard/iscsi-ha $release --pattern "*.src.rpm" --dir ~/rpms
+          done
+
+      # Step 5: Prepare the RPM repository (create metadata)
+      - name: Prepare RPM Repository
+        run: |
+          mkdir -p ~/repo
+          cp ~/rpms/*.rpm ~/repo/
+          cp ~/rpms/*.src.rpm ~/repo/
+          createrepo ~/repo
+
       - name: Setup Pages
         uses: actions/configure-pages@v5
       - name: Build with Jekyll
@@ -35,10 +73,16 @@ jobs:
         with:
           source: ./
           destination: ./_site
+
+      # Step 7: Copy RPMs and metadata to the _site directory for GitHub Pages
+      - name: Copy RPMs and metadata to _site directory
+        run: |
+          cp -R ~/repo/* ./_site/
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
 
-  # Deployment job
+  # Deployment job for GitHub Pages
   deploy:
     environment:
       name: github-pages
