@@ -24,6 +24,10 @@ jobs:
   # Build job
   build:
     runs-on: ubuntu-latest
+
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
     steps:
       # Step 1: Checkout the repository
       - name: Checkout Code
