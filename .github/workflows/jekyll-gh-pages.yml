@@ -50,7 +50,7 @@ jobs:
           for release in $releases; do
             echo "Downloading release $release"
             gh release download --repo ha-lizard/ha-lizard-rpm-demo $release --pattern "*.rpm" --dir ~/rpms
-            gh release download --repo ha-lizard/ha-lizard-rpm-demo $release --pattern "*.src.rpm" --dir ~/rpms
+            #gh release download --repo ha-lizard/ha-lizard-rpm-demo $release --pattern "*.src.rpm" --dir ~/rpms
           done
 
       - name: Download RPMs from ha-lizard/iscsi-ha
@@ -59,7 +59,7 @@ jobs:
           for release in $releases; do
             echo "Downloading release $release"
             gh release download --repo ha-lizard/iscsi-ha $release --pattern "*.rpm" --dir ~/rpms
-            gh release download --repo ha-lizard/iscsi-ha $release --pattern "*.src.rpm" --dir ~/rpms
+            #gh release download --repo ha-lizard/iscsi-ha $release --pattern "*.src.rpm" --dir ~/rpms
           done
 
       # Step 5: Prepare the RPM repository (create metadata)
