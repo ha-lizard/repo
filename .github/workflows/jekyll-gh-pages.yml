@@ -68,6 +68,8 @@ jobs:
           mkdir -p ~/repo
           cp ~/rpms/*.rpm ~/repo/
           cp ~/rpms/*.src.rpm ~/repo/
+          dpkg -l | grep createrepo
+          dpkg -L createrepo-c
           createrepo-c ~/repo
 
       - name: Setup Pages
