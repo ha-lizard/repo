@@ -60,6 +60,17 @@ jobs:
             gh release download --repo ha-lizard/iscsi-ha $release --pattern "*.rpm" --dir ~/rpms
           done
 
+
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+      - name: Build with Jekyll
+        uses: actions/jekyll-build-pages@v1
+        with:
+          source: ./
+          destination: ./_site
+  
+
       # Step 5: Prepare the RPM repository (create metadata)
       - name: Prepare RPM Repository
         run: |
@@ -92,14 +103,6 @@ jobs:
           jq -nR '[inputs | {"name": .}]' < _data/unstable_rpms.txt > _data/unstable_rpms.json
           rm _data/unstable_rpms.txt
 
-
-      - name: Setup Pages
-        uses: actions/configure-pages@v5
-      - name: Build with Jekyll
-        uses: actions/jekyll-build-pages@v1
-        with:
-          source: ./
-          destination: ./_site
 
       # Step 7: Copy RPMs and metadata to the _site directory for GitHub Pages
       - name: Copy RPMs and metadata to _site directory
