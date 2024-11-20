@@ -60,11 +60,10 @@ jobs:
             gh release download --repo ha-lizard/iscsi-ha $release --pattern "*.rpm" --dir ~/rpms
           done
 
-      # Step 5: Prepare the RPM repository (create metadata)
+      # Step 5: Organize RPMs into stable and unstable directories
       - name: Prepare RPM Repository
         run: |
-
-          # Create directories for stable and unstable RPMs if they don't exist
+          # Create directories for stable and unstable RPMs
           mkdir -p ~/stable ~/unstable _data/
 
           # Iterate over all RPM files in the rpms directory
@@ -79,49 +78,45 @@ jobs:
             fi
           done
 
-          # Create empty files to avoid errors
+          # Create empty files to avoid errors during processing
           touch _data/stable_rpms.txt _data/unstable_rpms.txt
 
           # Check if there are RPMs in the stable directory and generate the JSON file
           if find ~/stable -maxdepth 1 -name "*.rpm" | grep -q .; then
             # List RPMs and generate the stable_rpms.txt file
             ls -1 ~/stable/ > _data/stable_rpms.txt
-            cat _data/stable_rpms.txt
           fi
-
           # Generate stable_rpms.json from the list of RPMs
           jq -nR '[inputs | {"name": .}]' < _data/stable_rpms.txt > _data/stable_rpms.json
-
 
           # Check if there are RPMs in the unstable directory and generate the JSON file
           if find ~/unstable -maxdepth 1 -name "*.rpm" | grep -q .; then
             # List RPMs and generate the unstable_rpms.txt file
             ls -1 ~/unstable/ > _data/unstable_rpms.txt
-            cat _data/unstable_rpms.txt
           fi
-
           # Generate unstable_rpms.json from the list of RPMs
           jq -nR '[inputs | {"name": .}]' < _data/unstable_rpms.txt > _data/unstable_rpms.json
 
+          # Create metadata for the repository
           createrepo_c ~/stable
           createrepo_c ~/unstable
 
+      # Step 6: Setup Pages with Jekyll
       - name: Setup Pages
         uses: actions/configure-pages@v5
+
       - name: Build with Jekyll
         uses: actions/jekyll-build-pages@v1
         with:
           source: ./
           destination: ./_site
 
-      # Step 7: Copy RPMs and metadata to the _site directory for GitHub Pages
+      # Step 7: Copy RPMs and metadata to the _site directory
       - name: Copy RPMs and metadata to _site directory
         run: |
           sudo cp -R ~/stable ~/unstable ./_site/
-          find ./_site/
-          cat ./_site/_data/*.json
-          cat ./_site/_data/*.txt
 
+      # Step 8: Upload artifact
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
 
