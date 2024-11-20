@@ -82,24 +82,28 @@ jobs:
           createrepo_c ~/stable
           createrepo_c ~/unstable
 
-          find ~/stable
-          find ~/unstable
+          # Create empty files to avoid errors
+          touch _data/stable_rpms.txt _data/unstable_rpms.txt
 
-          # Create an empty file to avoid errors
-          touch _data/stable_rpms.txt  _data/unstable_rpms.txt
-
-          # Generate a JSON file for stable RPMs
-          if compgen -G "~/stable/*.rpm" > /dev/null; then
-            ls -1 ~/stable/*.rpm
+          # Check if there are RPMs in the stable directory and generate the JSON file
+          if find ~/stable -maxdepth 1 -name "*.rpm" | grep -q .; then
+            # List RPMs and generate the stable_rpms.txt file
             ls -1 ~/stable/*.rpm > _data/stable_rpms.txt
             cat _data/stable_rpms.txt
           fi
+
+          # Generate stable_rpms.json from the list of RPMs
           jq -nR '[inputs | {"name": .}]' < _data/stable_rpms.txt > _data/stable_rpms.json
 
-          # Generate a JSON file for unstable RPMs
-          if compgen -G "~/unstable/*.rpm" > /dev/null; then
+
+          # Check if there are RPMs in the unstable directory and generate the JSON file
+          if find ~/unstable -maxdepth 1 -name "*.rpm" | grep -q .; then
+            # List RPMs and generate the unstable_rpms.txt file
             ls -1 ~/unstable/*.rpm > _data/unstable_rpms.txt
+            cat _data/unstable_rpms.txt
           fi
+
+          # Generate unstable_rpms.json from the list of RPMs
           jq -nR '[inputs | {"name": .}]' < _data/unstable_rpms.txt > _data/unstable_rpms.json
 
       - name: Setup Pages
