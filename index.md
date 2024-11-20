@@ -3,8 +3,6 @@ layout: home
 title: HA-Lizard RPM Repository
 ---
 
-# HA-Lizard RPM Repository
-
 ## How to Use
 
 Add the following to your `/etc/yum.repos.d/ha-lizard.repo`:
