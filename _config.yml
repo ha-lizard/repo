@@ -26,11 +26,6 @@ plugins:
 # TODO: google analytics ?
 # google_analytics: UA-NNNNNNNN-N
 
-# Markdown and theme settings
-markdown: kramdown
-highlighter: rouge
-theme: minima
-
 # Include additional directories
 include:
   - _data
@@ -44,13 +39,3 @@ exclude:
   - README.md
   - Gemfile
   - Gemfile.lock
-
-# Default settings for repository-related links
-defaults:
-  - scope:
-      path: ""
-    values:
-      layout: default
-
-# Output settings
-permalink: pretty
