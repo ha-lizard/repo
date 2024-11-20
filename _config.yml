@@ -7,7 +7,7 @@ url: "https://ha-liza.github.io/repo" # Replace with your GitHub Pages URL
 # Author information
 author:
   name: HA-Lizard Team
-  email: contact@halizard.com
+  email: no_spam@halizard.com
   url: https://halizard.com/
 
 remote_theme: jekyll/minima
@@ -18,7 +18,7 @@ minima:
   social_links:
     - { platform: github, user_url: "https://github.com/ha-lizard" }
     - { platform: twitter, user_url: "https://twitter.com/halizard" }
-    - { platform: telegram, user_url: "@ha-lizard" }
+    - { platform: telegram, user_url: "https://t.me/ha-lizard" }
 
 # Plugins
 plugins:
