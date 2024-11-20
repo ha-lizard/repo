@@ -60,17 +60,6 @@ jobs:
             gh release download --repo ha-lizard/iscsi-ha $release --pattern "*.rpm" --dir ~/rpms
           done
 
-
-
-      - name: Setup Pages
-        uses: actions/configure-pages@v5
-      - name: Build with Jekyll
-        uses: actions/jekyll-build-pages@v1
-        with:
-          source: ./
-          destination: ./_site
-  
-
       # Step 5: Prepare the RPM repository (create metadata)
       - name: Prepare RPM Repository
         run: |
@@ -94,15 +83,32 @@ jobs:
           createrepo_c ~/unstable
 
           # Generate a JSON file for stable RPMs
-          ls -1 ~/stable/*.rpm > _data/stable_rpms.txt
-          jq -nR '[inputs | {"name": .}]' < _data/stable_rpms.txt > _data/stable_rpms.json
-          rm _data/stable_rpms.txt
+          if compgen -G "~/stable/*.rpm" > /dev/null; then
+            ls -1 ~/stable/*.rpm > _data/stable_rpms.txt
+            jq -nR '[inputs | {"name": .}]' < _data/stable_rpms.txt > _data/stable_rpms.json
+            rm _data/stable_rpms.txt
+          else
+            # Create an empty file to avoid errors
+            : > _data/stable_rpms.txt
+          fi
 
           # Generate a JSON file for unstable RPMs
-          ls -1 ~/unstable/*.rpm > _data/unstable_rpms.txt
-          jq -nR '[inputs | {"name": .}]' < _data/unstable_rpms.txt > _data/unstable_rpms.json
-          rm _data/unstable_rpms.txt
+          if compgen -G "~/unstable/*.rpm" > /dev/null; then
+            ls -1 ~/unstable/*.rpm > _data/unstable_rpms.txt
+            jq -nR '[inputs | {"name": .}]' < _data/unstable_rpms.txt > _data/unstable_rpms.json
+            rm _data/unstable_rpms.txt
+          else
+            # Create an empty file to avoid errors
+            : > _data/unstable_rpms.txt
+          fi
 
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+      - name: Build with Jekyll
+        uses: actions/jekyll-build-pages@v1
+        with:
+          source: ./
+          destination: ./_site
 
       # Step 7: Copy RPMs and metadata to the _site directory for GitHub Pages
       - name: Copy RPMs and metadata to _site directory
