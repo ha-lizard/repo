@@ -10,6 +10,8 @@ author:
   email: contact@halizard.com
   url: https://halizard.com/
 
+theme: minima
+
 # Social links
 minima:
   social_links:
