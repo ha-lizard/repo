@@ -113,6 +113,7 @@ jobs:
         run: |
           sudo cp -R ~/stable ~/unstable ./_site/
           find ./_site/
+          cat ./_site/_data/*json
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
