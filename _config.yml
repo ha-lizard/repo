@@ -1,14 +1,14 @@
 # Site configuration
 title: HA-Lizard RPM Repository
 description: Official repository for HA-Lizard, providing tools for high availability in Citrix XenServer environments.
-baseurl: "" # Leave empty for the root of the domain
+baseurl: "/repo"
 url: "https://ha-liza.github.io/repo" # Replace with your GitHub Pages URL
 
 # Author information
 author:
   name: HA-Lizard Team
   email: contact@halizard.com
-  url: https://halizard.com
+  url: https://halizard.com/
 
 # Social links
 social_links:
