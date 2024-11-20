@@ -27,13 +27,14 @@ gpgkey=https:///ha-lizard.github.io/repo/gpg_key.asc
 <h2>Stable RPMs</h2>
 <ul>
   {% for rpm in site.data.stable_rpms %}
-  <li><a href="{{ site.baseurl }}/stable/{{ rpm.name }}</a></li>
-  {% endfor %}
+  <li><a href="{{ site.baseurl }}/stable/{{ rpm.name }}">{{ rpm.name }}</a></li>
+{% endfor %}
+
 </ul>
 
 <h2>Unstable RPMs</h2>
 <ul>
   {% for rpm in site.data.unstable_rpms %}
-  <li><a href="{{ site.baseurl }}/unstable/{{ rpm.name }}</a></li>
-  {% endfor %}
+  <li><a href="{{ site.baseurl }}/unstable/{{ rpm.name }}">{{ rpm.name }}</a></li>
+{% endfor %}
 </ul>
