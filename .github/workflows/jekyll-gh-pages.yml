@@ -50,7 +50,6 @@ jobs:
           for release in $releases; do
             echo "Downloading release $release"
             gh release download --repo ha-lizard/ha-lizard-rpm-demo $release --pattern "*.rpm" --dir ~/rpms
-            #gh release download --repo ha-lizard/ha-lizard-rpm-demo $release --pattern "*.src.rpm" --dir ~/rpms
           done
 
       - name: Download RPMs from ha-lizard/iscsi-ha
@@ -59,18 +58,40 @@ jobs:
           for release in $releases; do
             echo "Downloading release $release"
             gh release download --repo ha-lizard/iscsi-ha $release --pattern "*.rpm" --dir ~/rpms
-            #gh release download --repo ha-lizard/iscsi-ha $release --pattern "*.src.rpm" --dir ~/rpms
           done
 
       # Step 5: Prepare the RPM repository (create metadata)
       - name: Prepare RPM Repository
         run: |
-          mkdir -p ~/repo
-          cp ~/rpms/*.rpm ~/repo/
-          cp ~/rpms/*.src.rpm ~/repo/
-          dpkg -l | grep createrepo
-          dpkg -L createrepo-c
-          createrepo_c ~/repo
+
+          # Create directories for stable and unstable RPMs if they don't exist
+          mkdir -p ~/stable ~/unstable
+
+          # Iterate over all RPM files in the rpms directory
+          for rpm in ~rpms/*.rpm; do
+            # Check if the filename contains "-rc", "-RC", "-beta", or "-BETA"
+            if [[ "$rpm" =~ -(rc|RC|beta|BETA) ]]; then
+              # Move the unstable RPM to the unstable directory
+              mv "$rpm" ~/unstable/
+            else
+              # Move the stable RPM to the stable directory
+              mv "$rpm" ~/stable/
+            fi
+          done
+
+          createrepo_c ~/stable
+          createrepo_c ~/unstable
+
+          # Generate a JSON file for stable RPMs
+          ls -1 ~/stable/*.rpm > _data/stable_rpms.txt
+          jq -nR '[inputs | {"name": .}]' < _data/stable_rpms.txt > _data/stable_rpms.json
+          rm _data/stable_rpms.txt
+
+          # Generate a JSON file for unstable RPMs
+          ls -1 ~/unstable/*.rpm > _data/unstable_rpms.txt
+          jq -nR '[inputs | {"name": .}]' < _data/unstable_rpms.txt > _data/unstable_rpms.json
+          rm _data/unstable_rpms.txt
+
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
@@ -83,7 +104,7 @@ jobs:
       # Step 7: Copy RPMs and metadata to the _site directory for GitHub Pages
       - name: Copy RPMs and metadata to _site directory
         run: |
-          sudo cp -R ~/repo ./_site/
+          sudo cp -R ~/stable ~/unstable ./_site/
           find ./_site/
 
       - name: Upload artifact

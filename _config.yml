@@ -1,0 +1,63 @@
+# Site configuration
+title: HA-Lizard RPM Repository
+description: Official repository for HA-Lizard, providing tools for high availability in Citrix XenServer environments.
+baseurl: "" # Leave empty for the root of the domain
+url: "https://ha-liza.github.io/repo" # Replace with your GitHub Pages URL
+
+# Author information
+author:
+  name: HA-Lizard Team
+  email: contact@halizard.com
+  url: https://halizard.com
+
+# Social links
+social_links:
+  - title: HA-Lizard Website
+    url: https://halizard.com
+  - title: GitHub
+    url: https://github.com/ha-lizard
+
+# Plugins
+plugins:
+  - jekyll-feed # RSS feeds for blog posts
+  - jekyll-sitemap # Generates a sitemap
+  - jekyll-seo-tag # Adds SEO metadata
+
+# Collections
+collections:
+  rpms:
+    output: true
+    permalink: /:path/
+
+# Markdown and theme settings
+markdown: kramdown
+highlighter: rouge
+theme: minima # Default Jekyll theme, change if you want a different look
+
+# Pagination for blog posts
+paginate: 5
+paginate_path: "/blog/page:num"
+
+# Include additional directories
+include:
+  - _data
+  - rpms
+  - stable
+  - unstable
+  - gpg
+
+# Exclude these from the output
+exclude:
+  - README.md
+  - Gemfile
+  - Gemfile.lock
+
+# Default settings for repository-related links
+defaults:
+  - scope:
+      path: ""
+    values:
+      layout: default
+
+# Output settings
+permalink: pretty
