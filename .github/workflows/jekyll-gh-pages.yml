@@ -85,7 +85,7 @@ jobs:
           # Check if there are RPMs in the stable directory and generate the JSON file
           if find ~/stable -maxdepth 1 -name "*.rpm" | grep -q .; then
             # List RPMs and generate the stable_rpms.txt file
-            ls -1 stable/ > _data/stable_rpms.txt
+            ls -1 ~/stable/ > _data/stable_rpms.txt
             cat _data/stable_rpms.txt
           fi
 
@@ -96,7 +96,7 @@ jobs:
           # Check if there are RPMs in the unstable directory and generate the JSON file
           if find ~/unstable -maxdepth 1 -name "*.rpm" | grep -q .; then
             # List RPMs and generate the unstable_rpms.txt file
-            ls -1 unstable/ > _data/unstable_rpms.txt
+            ls -1 ~/unstable/ > _data/unstable_rpms.txt
             cat _data/unstable_rpms.txt
           fi
 
