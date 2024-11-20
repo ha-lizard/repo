@@ -90,7 +90,9 @@ jobs:
 
           # Generate a JSON file for stable RPMs
           if compgen -G "~/stable/*.rpm" > /dev/null; then
+            ls -1 ~/stable/*.rpm
             ls -1 ~/stable/*.rpm > _data/stable_rpms.txt
+            cat _data/stable_rpms.txt
           fi
           jq -nR '[inputs | {"name": .}]' < _data/stable_rpms.txt > _data/stable_rpms.json
 
@@ -113,7 +115,8 @@ jobs:
         run: |
           sudo cp -R ~/stable ~/unstable ./_site/
           find ./_site/
-          cat ./_site/_data/*json
+          cat ./_site/_data/*.json
+          cat ./_site/_data/*.txt
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
