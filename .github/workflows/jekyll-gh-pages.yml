@@ -76,7 +76,7 @@ jobs:
         run: |
 
           # Create directories for stable and unstable RPMs if they don't exist
-          mkdir -p ~/stable ~/unstable
+          mkdir -p ~/stable ~/unstable _data/
 
           # Iterate over all RPM files in the rpms directory
           for rpm in ~/rpms/*.rpm; do
