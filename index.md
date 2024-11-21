@@ -10,10 +10,10 @@ Add the following to your `/etc/yum.repos.d/ha-lizard.repo`:
 ```bash
 [ha-lizard]
 name=HA-Lizard RPM Repository
-baseurl=https:///ha-lizard.github.io/repo/stable/
+baseurl=https://ha-lizard.github.io/repo/stable/
 enabled=1
 gpgcheck=1
-gpgkey=https:///ha-lizard.github.io/repo/gpg_key.asc
+gpgkey=https://ha-lizard.github.io/repo/gpg_key.asc
 ```
 
 ## GPG Key
