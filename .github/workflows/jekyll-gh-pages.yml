@@ -44,12 +44,12 @@ jobs:
         run: mkdir -p ~/rpms
 
       # Step 4: List and download RPMs from other repositories
-      - name: Download RPMs from ha-lizard/ha-lizard-rpm-demo
+      - name: Download RPMs from ha-lizard/ha-lizard
         run: |
-          releases=$(gh release list --repo ha-lizard/ha-lizard-rpm-demo --json tagName -q ".[].tagName")
+          releases=$(gh release list --repo ha-lizard/ha-lizard --json tagName -q ".[].tagName")
           for release in $releases; do
             echo "Downloading release $release"
-            gh release download --repo ha-lizard/ha-lizard-rpm-demo $release --pattern "*.rpm" --dir ~/rpms
+            gh release download --repo ha-lizard/ha-lizard $release --pattern "*.rpm" --dir ~/rpms
           done
 
       - name: Download RPMs from ha-lizard/iscsi-ha
