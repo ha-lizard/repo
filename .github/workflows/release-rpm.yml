@@ -34,7 +34,7 @@ jobs:
           mkdir -p ~/rpmbuild/{BUILD,RPMS,SOURCES,SPECS,SRPMS}
 
           # Move spec files into the build structure
-          cp -R rpm/SPECS/*.spec ~/rpmbuild/SPECS/
+          cp -R rpm/*.spec ~/rpmbuild/SPECS/
 
           # Create the source archive
           cd src
