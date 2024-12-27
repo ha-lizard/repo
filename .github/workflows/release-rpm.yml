@@ -1,11 +1,11 @@
-name: Build, Sign, and Publish SRPM and RPM on Release
+name: Create RPM with yum configuration.
+run-name: Build, Sign, and Publish SRPM and RPM for HA-Lizard yum repository configuration on Release
 
 on:
   release:
     types: [published] # Trigger when a new release is published
 
 jobs:
-  # Build job
   build-rpm:
     runs-on: ubuntu-latest
 
@@ -34,10 +34,12 @@ jobs:
           mkdir -p ~/rpmbuild/{BUILD,RPMS,SOURCES,SPECS,SRPMS}
 
           # Move spec files into the build structure
-          cp -R rpm/*.spec ~/rpmbuild/SPECS/
+          cp -R rpm/SPECS/*.spec ~/rpmbuild/SPECS/
 
           # Create the source archive
-          tar -czf ~/rpmbuild/SOURCES/ha-lizard-repo.tar.gz .
+          cd src
+          tar -czf ~/rpmbuild/SOURCES/ha-lizard-repo.tar.gz . ../CHANGELOG.md ../LICENSE
+          cd ..
 
       # Step 3: Extract version, release, and changelog info
       - name: Extract Version, Release, and Changelog

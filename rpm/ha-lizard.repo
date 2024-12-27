@@ -12,3 +12,10 @@ failovermethod=priority
 enabled=0
 gpgcheck=1
 gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-7
+
+[testing-ha-lizard]
+name=HA-Lizard UNSTABLE RPM Repository
+baseurl=https://ha-lizard.github.io/repo/unstable/
+enabled=0
+gpgcheck=1
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-HA-LIZARD-25
