@@ -14,7 +14,7 @@ title: HA-Lizard RPM Repository
 **Note:** The repositories are **disabled by default** to prevent automatic updates. You must **enable** the repository each time you install or update packages.
 
 ```bash
-rpm -ivh https://github.com/ha-lizard/repo/releases/latest/download/ha-lizard-repo-__VERSION__-__RELEASE__.x86_64.rpm
+rpm -ivh __LAST_RPM_URL__
 yum --enablerepo=ha-lizard* install ha-lizard iscsi-ha
 ```
 

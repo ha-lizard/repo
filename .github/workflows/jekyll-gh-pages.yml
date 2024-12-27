@@ -102,52 +102,17 @@ jobs:
           createrepo_c ~/stable
           createrepo_c ~/unstable
 
-      # Step 6: Extract version, release, and changelog info
-      - name: Extract Version and Release
-        id: versioning
+      # Step 6: Replace placeholders in spec file with version
+      - name: Replace RPM last version placeholders in index.md file
         run: |
           set -euo pipefail
 
-          # Get the release tag name from GitHub event data
-          TAG_NAME="${{ github.event.release.tag_name }}"
+          LAST_RPM_URL=$(gh --repo ha-lizard/repo release view --json assets -q '.assets[] | select(.name | test("x86_64.rpm")) | .url')
 
-          # Extract the version (numeric part before any dash)
-          VERSION=$(echo "$TAG_NAME" | sed -E 's/^v([0-9]+\.[0-9]+\.[0-9]+)(-.*)?$/\1/')
+          # Replace placeholders in index.md files with actual last version
+          sed -i "s/__LAST_RPM_URL__/${LAST_RPM_URL}/g" ./index.md
 
-          # Initialize prerelease variable
-          PRERELEASE=""
-
-          # Check if the tag contains prerelease markers or if the release is marked as a prerelease
-          if [[ "$TAG_NAME" =~ -(rc|RC|beta|BETA) ]]; then
-            PRERELEASE=$(echo "$TAG_NAME" | sed -E 's/^.*-(rc|RC|beta|BETA).*$/\1/')
-          elif [[ "${{ github.event.release.prerelease }}" == "true" ]]; then
-            PRERELEASE="rc"
-          fi
-
-          # Get the number of commits to use as the release number
-          RELEASE_NUMBER=$(git rev-list --count HEAD)
-
-          # Combine the prerelease, and release number into the final RELEASE
-          if [ -n "$PRERELEASE" ]; then
-            RELEASE="${PRERELEASE}${RELEASE_NUMBER}"
-          else
-            RELEASE="${RELEASE_NUMBER}"
-          fi
-
-          # Save information to environment variable for use in the spec file
-          echo "VERSION=${VERSION}" >> $GITHUB_ENV
-          echo "RELEASE=${RELEASE}" >> $GITHUB_ENV
-
-      # Step 4: Replace placeholders in spec file with version, release, and changelog
-      - name: Replace placeholders in .spec file
-        run: |
-          set -euo pipefail
-
-          # Replace placeholders in spec files with actual version, release, and changelog
-          sed -i "s/__VERSION__/${VERSION}/g" ./index.md
-          sed -i "s/__RELEASE__/${RELEASE}/g" ./index.md
-
-      # Step 6: Setup Pages with Jekyll
+      # Step 7: Setup Pages with Jekyll
       - name: Setup Pages
         uses: actions/configure-pages@v5
 
@@ -157,12 +122,12 @@ jobs:
           source: ./
           destination: ./_site
 
-      # Step 7: Copy RPMs and metadata to the _site directory
+      # Step 8: Copy RPMs and metadata to the _site directory
       - name: Copy RPMs and metadata to _site directory
         run: |
           sudo cp -R ~/stable ~/unstable ./_site/
 
-      # Step 8: Upload artifact
+      # Step 9: Upload artifact
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
 
