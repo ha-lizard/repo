@@ -102,15 +102,19 @@ jobs:
           createrepo_c ~/stable
           createrepo_c ~/unstable
 
-      # Step 6: Replace placeholders in spec file with version
+      # Step 6: Replace RPM last version placeholders in index.md file
       - name: Replace RPM last version placeholders in index.md file
         run: |
           set -euo pipefail
 
+          # Get the URL of the last RPM asset with x86_64.rpm in its name
           LAST_RPM_URL=$(gh --repo ha-lizard/repo release view --json assets -q '.assets[] | select(.name | test("x86_64.rpm")) | .url')
 
-          # Replace placeholders in index.md files with actual last version
-          sed -i "s/__LAST_RPM_URL__/${LAST_RPM_URL}/g" ./index.md
+          # Ensure URL is correctly encoded for use in sed
+          LAST_RPM_URL=$(echo "$LAST_RPM_URL" | sed 's|/|\\/|g')
+
+          # Replace placeholders in index.md file with the actual last version URL
+          sed -i "s|__LAST_RPM_URL__|${LAST_RPM_URL}|g" ./index.md
 
       # Step 7: Setup Pages with Jekyll
       - name: Setup Pages
