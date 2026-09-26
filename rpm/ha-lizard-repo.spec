@@ -19,8 +19,9 @@ process of enabling and managing the HA-Lizard repository for users.
 
 Key Features:
 * Easy repository setup for HA-Lizard packages
-* Includes EPEL 7 repository to allow DRBD and TGT packages
-* Includes GPG key for package verification
+* Includes EPEL 7, CentOS 7 base and ELRepo el7 archive repositories to
+  provide the TGT and DRBD 8.4 dependencies
+* Includes GPG keys for package verification
 * Compatible with YUM and DNF package managers
 
 %prep
@@ -42,6 +43,8 @@ install -Dpm 644 rpm/ha-lizard.repo %{buildroot}%{_sysconfdir}/yum.repos.d/ha-li
 # Install the GPG keys into the appropriate system directory
 install -Dpm 644 rpm/RPM-GPG-KEY-HA-LIZARD-25 %{buildroot}%{_sysconfdir}/pki/rpm-gpg/RPM-GPG-KEY-HA-LIZARD-25
 install -Dpm 644 rpm/RPM-GPG-KEY-EPEL-7 %{buildroot}%{_sysconfdir}/pki/rpm-gpg/RPM-GPG-KEY-EPEL-7
+install -Dpm 644 rpm/RPM-GPG-KEY-CentOS-7 %{buildroot}%{_sysconfdir}/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7
+install -Dpm 644 rpm/RPM-GPG-KEY-elrepo.org %{buildroot}%{_sysconfdir}/pki/rpm-gpg/RPM-GPG-KEY-elrepo.org
 # Install the GPL License file into the documentation directory
 install -Dpm 644 LICENSE %{buildroot}%{_docdir}/%{name}/LICENSE
 
@@ -51,6 +54,8 @@ install -Dpm 644 LICENSE %{buildroot}%{_docdir}/%{name}/LICENSE
 %config(noreplace) /etc/yum.repos.d/ha-lizard.repo
 /etc/pki/rpm-gpg/RPM-GPG-KEY-HA-LIZARD-25
 /etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-7
+/etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7
+/etc/pki/rpm-gpg/RPM-GPG-KEY-elrepo.org
 
 # INFO: Do not put anything after the changelog macro. github actions will add the changelog there.
 %changelog

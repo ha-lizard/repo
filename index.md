@@ -48,6 +48,27 @@ enabled=0
 gpgcheck=1
 gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-7
 
+# CentOS 7 base: provides libibverbs, librdmacm and rdma-core, required by
+# scsi-target-utils (the iSCSI target / TGT userspace).
+[ha-lizard-base]
+name=CentOS-7 Base - $basearch (HA-Lizard dependency)
+baseurl=https://vault.centos.org/7.9.2009/os/$basearch/
+enabled=0
+gpgcheck=1
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7
+protect=0
+
+# ELRepo el7 archive: provides the DRBD 8.4 userspace tools (drbd84-utils)
+# matching the DRBD 8.4 kernel module shipped by XCP-ng. The live ELRepo el7
+# repository was retired, so its archive is used.
+[ha-lizard-elrepo]
+name=ELRepo.org Community Enterprise Linux Repository - el7 (archive)
+baseurl=https://mirror.rackspace.com/elrepo/archive/elrepo/el7/$basearch/
+enabled=0
+gpgcheck=1
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-elrepo.org
+protect=0
+
 [testing-ha-lizard]
 name=HA-Lizard UNSTABLE RPM Repository
 baseurl=https://ha-lizard.github.io/repo/unstable/
